@@ -30,17 +30,23 @@ def search():
         address=request.form.get('address')
         response=requests.get(url.format(address), headers=headers).json()
         cur=conn.cursor()
-        try:
-            cur.execute('INSERT INTO nft(address, discription) VALUES (%s,%s);',(address,response))
+        res=str(response)
+        db1 = bool(cur.rowcount)
+        db2 = False
+        if db1:
+            cur.execute('SELECT discription FROM nft WHERE address=%s ',(address,))
+            db2 = (cur.fetchone() is not None)   
+        if db2:
+            cur.execute('SELECT discription FROM nft WHERE address=%s ',(address,))
+            rows=cur.fetchall
+        else:    
+            cur.execute('INSERT INTO nft(address, discription) VALUES (%s,%s);',(address,res))
             conn.commit()
-            if address==[]:
-                cur.execute('SELECT discription FROM nft WHERE address=%s ',(address,))
-                rows=cur.fetchall
-        except:
-            return response
+        
+        
             
 
-        return render_template('output.html', out = json2html.convert(json = response))
+        return render_template('output.html', out = response)
     return render_template('search.html')
 
 if __name__ == '__main__':
