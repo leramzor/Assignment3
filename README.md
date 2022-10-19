@@ -1,7 +1,7 @@
-App to search information about NFT
+## App to search information about NFT
 
 
-Installation
+## Installation
 You need to pip install additional packages to your environment:
 json2html, psycopg2, flask, requests
 After installing the necessary libraries, install PostgreSQL.
